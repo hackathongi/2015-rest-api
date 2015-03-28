@@ -15,11 +15,14 @@
    */
 
   $app->get('/jobs', function () use ( $app ) {
-      $jobs = Job::all();
+      $jobs = Job::all( array( 'include' => array( 'owner' ) ) );
       if ( count($jobs) ) {
         $response = array();
         foreach ( $jobs as $job ) {
-          $response[] = json_decode($job->to_json(), true);
+          $response[] = json_decode($job->to_json(array(
+            'include' => array('owner'),
+            'except' => 'owner_id'
+          )), true);
         }
         echo json_encode($response);
       } else {
