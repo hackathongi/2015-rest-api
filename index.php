@@ -66,12 +66,41 @@
   /**
    * Contact
    */
-  $app->get('/contact/:id', function ( $id ) use ( $app ) {
+  $app->get('/contacts/:id', function ( $id ) use ( $app ) {
     try {
       $contact = Contact::find($id);
       echo $contact->to_json();
     } catch ( ActiveRecord\RecordNotFound $e ) {
       $app->response->setStatus( 404 );
+    }
+  });
+
+  $app->post('/contacts', function () use ( $app ) {
+    $contact = new Contact( $app->request()->params() );
+    if ( $contact->save() ) {
+      $app->response->setStatus( 201 );
+    } else {
+      $app->response->setStatus( 400 );
+    }
+  });
+
+  $app->post('/user_to_contact', function () use ( $app ) {
+    $user_id = $app->request()->params('user_id');
+    $friend_id = $app->request()->params('friend_id');
+
+    $user = User::find( $user_id );
+
+    $contact = new Contact( array(
+      'id'      => $user_id,
+      'user_id' => $friend_id,
+      'name'    => $user->name,
+      'facebook_id' => $user->facebook_id
+    ) );
+
+    if ( $contact->save() ) {
+      $app->response->setStatus( 201 );
+    } else {
+      $app->response->setStatus( 400 );
     }
   });
 
@@ -105,18 +134,6 @@
   $app->post('/applications', function () use ( $app ) {
     $application = new Application( $app->request()->params() );
     if ( $application->save() ) {
-      $app->response->setStatus( 201 );
-    } else {
-      $app->response->setStatus( 400 );
-    }
-  });
-
-  /**
-   * Contacts
-   */
-  $app->post('/contacts', function () use ( $app ) {
-    $contact = new Contact( $app->request()->params() );
-    if ( $contact->save() ) {
       $app->response->setStatus( 201 );
     } else {
       $app->response->setStatus( 400 );
