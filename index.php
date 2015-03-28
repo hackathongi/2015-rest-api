@@ -94,7 +94,8 @@
       'id'      => $user_id,
       'user_id' => $friend_id,
       'name'    => $user->name,
-      'facebook_id' => $user->facebook_id
+      'facebook_id' => $user->facebook_id,
+      'picture_url' => "https://graph.facebook.com/{$user->facebook_id}/picture?type=large"
     ) );
 
     if ( $contact->save() ) {
