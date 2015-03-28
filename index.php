@@ -14,6 +14,7 @@
    * Jobs API
    */
 
+  // GET /jobs
   $app->get('/jobs', function () use ( $app ) {
       $jobs = Job::all( array( 'include' => array( 'owner' ) ) );
       if ( count($jobs) ) {
@@ -30,6 +31,7 @@
       }
   });
 
+  // GET /jobs/:id
   $app->get('/jobs/:id', function ( $id ) use ( $app ) {
     try {
       $job = Job::find($id, array( 'include' => array('owner') ));
@@ -41,6 +43,24 @@
       $app->response->setStatus( 404 );
     }
   });
+
+  // GET /jobs/city/:name
+  $app->get('/jobs/city/:name', function ( $name ) use ( $app ) {
+      $jobs = Job::find_all_by_city( $name );
+      if ( count($jobs) ) {
+        $response = array();
+        foreach ( $jobs as $job ) {
+          $response[] = json_decode($job->to_json(array(
+            'include' => array('owner'),
+            'except' => 'owner_id'
+          )), true);
+        }
+        echo json_encode($response);
+      } else {
+        echo json_encode(array());
+      }
+  });
+
 
   /**
    * Contact
