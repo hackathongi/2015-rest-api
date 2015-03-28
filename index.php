@@ -2,20 +2,21 @@
 
 	require 'vendor/autoload.php';
 	require 'bddConnector.php';
+	require 'hackjobsUtils.php';
 
 	$app = new \Slim\Slim();
-	$connector = new egapiConn();
 
-	$app->get('/', function ( ) use ( $app, $connector ) {
+	$app->get('/', function ( ) use ( $app ) {
 	    echo "Hello HackaJobs";
 	});
 
 	/**
-	 * Families
+	 * Job
 	 */
-	$app->get('/families/:token', function ( $token ) use ( $app, $connector ) {
-		if ( rightToken( $token ) ) {
-	    	$connector->getFamilies();
+	$app->get('/job/:token', function ( $token ) use ( $app ) {
+		if ( $token ) {
+			$job = Job::find(1);
+			echo $job->to_json();
 		}
 		else {
 			$app->response->setStatus( 400 );
@@ -24,3 +25,4 @@
 
 
 	$app->run();
+
