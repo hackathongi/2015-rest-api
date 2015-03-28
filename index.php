@@ -98,5 +98,17 @@
     }
   });
 
+  /**
+   * Applications
+   */
+  $app->post('/applications', function () use ( $app ) {
+    $application = new Application( $app->request()->params() );
+    if ( $application->save() ) {
+      $app->response->setStatus( 201 );
+    } else {
+      $app->response->setStatus( 400 );
+    }
+  });
+
   $app->run();
 
