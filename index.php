@@ -1,6 +1,7 @@
 <?php
 
   require 'vendor/autoload.php';
+  require 'env.php';
   require 'bddConnector.php';
 
   $app = new \Slim\Slim();
