@@ -13,13 +13,12 @@
   /**
    * Job
    */
-  $app->get('/job/:token', function ( $token ) use ( $app ) {
-    if ( $token ) {
-      $job = Job::find(1);
+  $app->get('/job/:id', function ( $id ) use ( $app ) {
+    try {
+      $job = Job::find($id);
       echo $job->to_json();
-    }
-    else {
-      $app->response->setStatus( 400 );
+    } catch ( ActiveRecord\RecordNotFound $e ) {
+      $app->response->setStatus( 404 );
     }
   });
 
