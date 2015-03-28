@@ -86,5 +86,17 @@
     }
   });
 
+  /**
+   * Recommendations
+   */
+  $app->post('/recommendations', function ( ) use ( $app ) {
+    $recommendation = new Recommendation( $app->request()->params() );
+    if ( $recommendation->save() ) {
+      $app->response->setStatus( 201 );
+    } else {
+      $app->response->setStatus( 400 );
+    }
+  });
+
   $app->run();
 
