@@ -11,9 +11,18 @@
   });
 
   /**
-   * Job
+   * Jobs API
    */
-  $app->get('/job/:id', function ( $id ) use ( $app ) {
+  $app->get('/jobs', function () use ( $app ) {
+      $jobs = Job::all();
+      if ( $jobs ) {
+        echo $jobs->to_json();
+      } else {
+        echo json_encode(array());
+      }
+  });
+
+  $app->get('/jobs/:id', function ( $id ) use ( $app ) {
     try {
       $job = Job::find($id);
       echo $job->to_json();
