@@ -112,6 +112,18 @@
   });
 
   /**
+   * Contacts
+   */
+  $app->post('/contacts', function () use ( $app ) {
+    $contact = new Contact( $app->request()->params() );
+    if ( $contact->save() ) {
+      $app->response->setStatus( 201 );
+    } else {
+      $app->response->setStatus( 400 );
+    }
+  });
+
+  /**
    * Nearby Jobs
    */
   // GET /nearby
