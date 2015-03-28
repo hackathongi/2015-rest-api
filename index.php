@@ -22,6 +22,17 @@
     }
   });
 
+  /**
+   * Contact
+   */
+  $app->get('/contact/:id', function ( $id ) use ( $app ) {
+    try {
+      $contact = Contact::find($id);
+      echo $contact->to_json();
+    } catch ( ActiveRecord\RecordNotFound $e ) {
+      $app->response->setStatus( 404 );
+    }
+  });
 
   $app->run();
 
