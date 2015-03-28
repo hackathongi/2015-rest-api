@@ -15,8 +15,12 @@
 
   $app->get('/jobs', function () use ( $app ) {
       $jobs = Job::all();
-      if ( $jobs ) {
-        echo $jobs->to_json();
+      if ( count($jobs) ) {
+        $response = array();
+        foreach ( $jobs as $job ) {
+          $response[] = json_decode($job->to_json(), true);
+        }
+        echo json_encode($response);
       } else {
         echo json_encode(array());
       }
@@ -24,11 +28,11 @@
 
   $app->get('/jobs/:id', function ( $id ) use ( $app ) {
     try {
-      $job = Job::find($id);
-      $owner = User::find($job->owner_id);
-      $owner_json = $owner->to_json();
-      $response = $job->to_json();
-      echo $response = preg_replace('@"owner_id":\d+@', '"owner":'.$owner_json, $response);
+      $job = Job::find($id, array( 'include' => array('owner') ));
+      echo $job->to_json(array(
+        'include' => array('owner'),
+        'except' => 'owner_id'
+      ));
     } catch ( ActiveRecord\RecordNotFound $e ) {
       $app->response->setStatus( 404 );
     }
