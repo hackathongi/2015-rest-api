@@ -8,6 +8,4 @@ require_once 'vendor/php-activerecord/php-activerecord/ActiveRecord.php';
 		        'development' => 'mysql://u_hackajobs:root@localhost/Hackajobs'));
 		 });
 
-
-
 ?>
