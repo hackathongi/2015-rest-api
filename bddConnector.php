@@ -1,6 +1,5 @@
 <?php
 require_once 'vendor/php-activerecord/php-activerecord/ActiveRecord.php';
-require_once 'hackjobsUtils.php';
 
 	if ( is_localhost() ) {
 		 ActiveRecord\Config::initialize(function($cfg)
@@ -18,6 +17,15 @@ require_once 'hackjobsUtils.php';
 		        'development' => 'mysql://hackajob:uiyr683d@mysql/Hackajobs'));
 		 });
 	}
+
+
+function is_localhost() {
+   $serverList = array('localhost', '127.0.0.1');
+
+	if(!in_array($_SERVER['HTTP_HOST'], $serverList)) {
+	        return true;
+	}
+}
 
 
 ?>
