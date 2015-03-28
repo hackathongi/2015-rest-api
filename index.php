@@ -110,5 +110,41 @@
     }
   });
 
+  /**
+   * Nearby Jobs
+   */
+  // GET /nearby
+  // longitude
+  // latitude
+  $app->get('/nearby', function () use ( $app ) {
+    $latitude = $app->request()->params('latitude');
+    $longitude = $app->request()->params('longitude');
+
+    // 6371 means search by km
+    $query = "SELECT id, ( 6371 * acos( cos( radians({$latitude}) ) * cos(
+    radians( latitude ) ) * cos( radians( longitude ) - radians({$longitude}) ) +
+    sin( radians({$latitude}) ) * sin( radians( latitude ) ) ) )
+    AS distance
+    FROM tbl_job
+    HAVING distance < 25
+    ORDER BY distance
+    LIMIT 0 , 20;";
+
+    $matches = Job::find_by_sql( $query );
+    if ( count($matches) ) {
+      $response = array();
+      foreach ( $matches as $match ) {
+        $job = Job::find($match->id);
+        $response[] = json_decode($job->to_json(array(
+          'include' => array('owner'),
+          'except' => 'owner_id'
+        )), true);
+      }
+      echo json_encode($response);
+    } else {
+      echo json_encode(array());
+    }
+  });
+
   $app->run();
 
