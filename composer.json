@@ -1,6 +1,6 @@
 {
     "require": {
         "slim/slim": "~2.5",
-        "lncd/oauth2": "*"
+        "php-activerecord/php-activerecord":"*"
     }
 }
